@@ -4,7 +4,6 @@ import 'nouislider/distribute/nouislider.css';
 class NoUiSliderBundle {
     static init() {
         NoUiSliderBundle.initSlider();
-        NoUiSliderBundle.initObserver();
     }
 
     static initSlider() {
@@ -38,28 +37,12 @@ class NoUiSliderBundle {
                     elem.querySelector('input:checked').checked = false;
 
                     if (elem.closest('.mod_filter') !== null) {
-                        elem.closest('form').submit();
+                        document.dispatchEvent(new CustomEvent('filterAsyncSubmit', {detail: {element: elem, form: elem.closest('form')}, bubbles: true, cancelable: true}));
                     }
                 } else {
                     elem.querySelector('[value="' + value + '"]').click();
                 }
             });
-        });
-    }
-
-    static initObserver() {
-        let initialized = false,
-            observer = new MutationObserver(function(mutations) {
-                mutations.forEach((mutation) => {
-                    if (mutation.target.getAttribute('data-submit-success') && mutation.target.querySelector('[data-no-ui-slider]') && !initialized) {
-                        NoUiSliderBundle.init();
-                        initialized = true;
-                    }
-                });
-            });
-
-        document.querySelectorAll('.mod_filter form').forEach((form) => {
-            observer.observe(form, {attributes: true, childList: true, characterData: true});
         });
     }
 
