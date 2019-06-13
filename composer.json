@@ -10,14 +10,14 @@
   },
   "autoload": {
     "psr-4": {
-      "HeimrichHannot\\ContaoNoUiSliderBundle\\": "src/"
+      "HeimrichHannot\\NoUiSliderBundle\\": "src/"
     }
   },
   "config": {
     "preferred-install": "dist"
   },
   "extra": {
-    "contao-manager-plugin": "HeimrichHannot\\ContaoNoUiSliderBundle\\ContaoManager\\Plugin",
+    "contao-manager-plugin": "HeimrichHannot\\NoUiSliderBundle\\ContaoManager\\Plugin",
     "foxy": true
   }
 }

@@ -1,6 +1,5 @@
 <?php
 
-
 namespace HeimrichHannot\NoUiSliderBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
