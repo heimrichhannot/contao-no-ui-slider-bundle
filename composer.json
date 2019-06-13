@@ -1,0 +1,23 @@
+{
+  "name": "heimrichhannot/contao-no-ui-slider-bundle",
+  "type": "contao-bundle",
+  "description": "Extension for heimrichhannot/contao-filter-bundle that extends choice field with range appearance",
+  "license": "LGPL-3.0-or-later",
+  "require": {
+    "php": "^7.1",
+    "contao/core-bundle": "^4.4",
+    "heimrichhannot/contao-utils-bundle": "^2.97"
+  },
+  "autoload": {
+    "psr-4": {
+      "HeimrichHannot\\ContaoNoUiSliderBundle\\": "src/"
+    }
+  },
+  "config": {
+    "preferred-install": "dist"
+  },
+  "extra": {
+    "contao-manager-plugin": "HeimrichHannot\\ContaoNoUiSliderBundle\\ContaoManager\\Plugin",
+    "foxy": true
+  }
+}
