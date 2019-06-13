@@ -1,9 +1,13 @@
 {
   "name": "@hundh/contao-no-ui-slider-bundle",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "description": "This package contains the frontend assets of the composer bundle heimrichhannot/contao-no-ui-slider-bundle.",
   "main": "js/contao-no-ui-slider-bundle.js",
-  "repository": "git@github.com:heimrichhannot-contao-components/contao-no-ui-slider-bundle.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:heimrichhannot/contao-no-ui-slider-bundle.git",
+    "directory": "src/Resources/npm-package"
+  },
   "author": "Heimrich & Hannot <digitales@heimrich-hannot.de>",
   "license": "MIT"
 }

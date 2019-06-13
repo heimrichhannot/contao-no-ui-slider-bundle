@@ -3,27 +3,11 @@ import 'nouislider/distribute/nouislider.css';
 
 class NoUiSliderBundle {
     static init() {
-        NoUiSliderBundle.init();
+        NoUiSliderBundle.initSlider();
         NoUiSliderBundle.initObserver();
     }
 
-    static init() {
-        var nonLinearStepSlider = document.getElementById('sdfudsfhs');
-
-        noUiSlider.create(nonLinearStepSlider, {
-            start: [0, 25],
-            snap: true,
-            range: {
-                'min': [0],
-                '20%': [1, 1],
-                '40%': [2, 2],
-                '60%': [3, 3],
-                '80%': [4, 4],
-                'max': [5]
-            }
-        });
-        return;
-
+    static initSlider() {
         document.querySelectorAll('[data-no-ui-slider]').forEach((elem) => {
             let range = JSON.parse(elem.getAttribute('data-steps')),
                 checked = elem.querySelector('input:checked'),
@@ -52,8 +36,10 @@ class NoUiSliderBundle {
 
                 if (0 === value) {
                     elem.querySelector('input:checked').checked = false;
-                    // TODO utils async submit
-                    FilterBundle.asyncSubmit(elem.closest('form'));
+
+                    if (elem.closest('.mod_filter') !== null) {
+                        elem.closest('form').submit();
+                    }
                 } else {
                     elem.querySelector('[value="' + value + '"]').click();
                 }
