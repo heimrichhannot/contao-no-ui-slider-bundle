@@ -36,7 +36,7 @@ class NoUiSliderBundle {
                 if (0 === value) {
                     elem.querySelector('input:checked').checked = false;
 
-                    if (elem.closest('.mod_filter') !== null) {
+                    if (null !== elem.closest('.mod_filter') && null !== elem.closest('[data-submit-on-change="1"]')) {
                         document.dispatchEvent(new CustomEvent('filterAsyncSubmit', {detail: {element: elem, form: elem.closest('form')}, bubbles: true, cancelable: true}));
                     }
                 } else {
