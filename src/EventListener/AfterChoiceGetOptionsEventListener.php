@@ -39,6 +39,10 @@ class AfterChoiceGetOptionsEventListener
                     'options'
                 );
 
+                if (empty($choices)) {
+                    return;
+                }
+
                 $valueMapping = [static::RANGE_STEP_MIN => 0];
                 $nameMapping  = [];
 
