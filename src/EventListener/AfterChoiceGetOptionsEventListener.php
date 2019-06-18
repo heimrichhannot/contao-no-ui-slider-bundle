@@ -6,6 +6,8 @@ namespace HeimrichHannot\NoUiSliderBundle\EventListener;
 
 use Contao\System;
 use HeimrichHannot\FilterBundle\Event\AdjustFilterOptionsEvent;
+use HeimrichHannot\FilterBundle\Filter\Type\ChoiceType;
+use HeimrichHannot\FilterBundle\Filter\Type\MultipleRangeType;
 
 class AfterChoiceGetOptionsEventListener
 {
@@ -17,7 +19,8 @@ class AfterChoiceGetOptionsEventListener
      */
     public function onAdjustFilterOptions(AdjustFilterOptionsEvent $event): void
     {
-        $element = $event->getElement();
+        $element      = $event->getElement();
+        $filterConfig = $event->getConfig();
 
         if (!$element->addNoUiSliderSupport) {
             return;
@@ -25,37 +28,94 @@ class AfterChoiceGetOptionsEventListener
 
         $options = $event->getOptions();
 
-        if (empty($choices = $options['choices'])) {
-            return;
+        switch ($element->type) {
+            case MultipleRangeType::TYPE:
+                $startElement = $filterConfig->getElementByValue($element->startElement);
+                $stopElement = $filterConfig->getElementByValue($element->stopElement);
+
+                // get options from first linked field
+                $choices = System::getContainer()->get('huh.utils.dca')->getConfigByArrayOrCallbackOrFunction(
+                    $GLOBALS['TL_DCA'][$filterConfig->getFilter()['dataContainer']]['fields'][$startElement->field],
+                    'options'
+                );
+
+                $valueMapping = [static::RANGE_STEP_MIN => 0];
+                $nameMapping  = [];
+
+                $i = 1;
+
+                // skip zero -> already done above
+                if (isset($choices[0]))
+                {
+                    unset($choices[0]);
+                }
+
+                foreach ($choices as $key => $value) {
+                    $valueMapping[$this->getStepIndex($choices, $i)] = (int)$value;
+                    $nameMapping[$value]                             = $key;
+
+                    $i++;
+                }
+
+                $options['attr']['data-no-ui-slider'] = true;
+                $options['attr']['data-no-ui-slider-start-field'] = '#' . $filterConfig->getFilter()['name'] . '_' . $element->getFormName($filterConfig) . '_' . $startElement->getFormName($filterConfig);
+                $options['attr']['data-no-ui-slider-stop-field'] = '#' . $filterConfig->getFilter()['name'] . '_' . $element->getFormName($filterConfig) . '_' . $stopElement->getFormName($filterConfig);
+
+                $config = [
+                    'isMultipleRange' => true,
+                    'defaultStart' => [0, max($choices)],
+                    'range'         => $valueMapping,
+                    'titles'        => $nameMapping,
+                    'label'         => $this->getLabel($element, $event->getBuilder(), $nameMapping),
+                    'defaultLabel' => System::getContainer()->get('translator')->trans('huh.filter.checked.unselected'),
+                ];
+
+                $options['attr']['data-no-ui-slider-config'] = \json_encode($config);
+
+                $event->setOptions($options);
+
+                break;
+            case ChoiceType::TYPE:
+                $choices = $options['choices'];
+
+                if (empty($choices)) {
+                    return;
+                }
+
+                $valueMapping = [static::RANGE_STEP_MIN => 0];
+                $nameMapping  = [];
+
+                $i = 1;
+
+                foreach ($choices as $key => $choice) {
+                    // skip zero -> already done above
+                    if (!$key) {
+                        continue;
+                    }
+
+                    $valueMapping[$this->getStepIndex($choices, $i)] = (int)$choice;
+                    $nameMapping[$choice]                            = $key;
+
+                    $i++;
+                }
+
+                $options['multiple']                   = false;
+                $options['expanded']                   = true;
+                $options['attr']['data-no-ui-slider']  = true;
+
+                $config = [
+                    'defaultStart' => 0,
+                    'range'         => $valueMapping,
+                    'titles'        => $nameMapping,
+                    'label'         => $this->getLabel($element, $event->getBuilder(), $nameMapping),
+                    'defaultLabel' => System::getContainer()->get('translator')->trans('huh.filter.checked.unselected'),
+                ];
+
+                $options['attr']['data-no-ui-slider-config'] = \json_encode($config);
+
+                $event->setOptions($options);
+                break;
         }
-
-        $valueMapping = [static::RANGE_STEP_MIN => 0];
-        $nameMapping  = [];
-
-        $i = 1;
-
-        foreach ($choices as $key => $choice) {
-            // skip zero -> already done above
-            if (!$key)
-            {
-                continue;
-            }
-
-            $valueMapping[$this->getStepIndex($choices, $i)] = (int)$choice;
-            $nameMapping[$choice]                              = $key;
-
-            $i++;
-        }
-
-        $options['multiple']                   = false;
-        $options['expanded']                   = true;
-        $options['attr']['data-no-ui-slider']         = 1;
-        $options['attr']['data-steps']         = \json_encode($valueMapping);
-        $options['attr']['data-titles']        = \json_encode($nameMapping);
-        $options['attr']['data-label']         = $this->getLabel($element, $event->getBuilder(), $nameMapping);
-        $options['attr']['data-default-label'] = System::getContainer()->get('translator')->trans('huh.filter.checked.unselected');
-
-        $event->setOptions($options);
     }
 
     /**
@@ -84,6 +144,6 @@ class AfterChoiceGetOptionsEventListener
             return static::RANGE_STEP_MAX;
         }
 
-        return ((floor(100 / count($choices))) * $i) . '%';
+        return ((100 / count($choices)) * $i) . '%';
     }
 }

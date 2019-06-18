@@ -1,13 +1,13 @@
 <?php
 
-if (\Contao\System::getContainer()->get('huh.utils.container')->isBundleActive('HeimrichHannot\FilterBundle\HeimrichHannotContaoFilterBundle'))
-{
+if (\Contao\System::getContainer()->get('huh.utils.container')->isBundleActive('HeimrichHannot\FilterBundle\HeimrichHannotContaoFilterBundle')) {
     $dca = &$GLOBALS['TL_DCA']['tl_filter_config_element'];
 
     /**
      * Palettes
      */
-    $dca['palettes'][\HeimrichHannot\FilterBundle\Filter\Type\ChoiceType::TYPE] = str_replace(',inputGroup',',addNoUiSliderSupport,inputGroup',$dca['palettes'][\HeimrichHannot\FilterBundle\Filter\Type\ChoiceType::TYPE]);
+    $dca['palettes'][\HeimrichHannot\FilterBundle\Filter\Type\ChoiceType::TYPE]        = str_replace(',inputGroup', ',addNoUiSliderSupport,inputGroup', $dca['palettes'][\HeimrichHannot\FilterBundle\Filter\Type\ChoiceType::TYPE]);
+    $dca['palettes'][\HeimrichHannot\FilterBundle\Filter\Type\MultipleRangeType::TYPE] = str_replace('hideLabel', 'hideLabel,addNoUiSliderSupport', $dca['palettes'][\HeimrichHannot\FilterBundle\Filter\Type\MultipleRangeType::TYPE]);
 
     /**
      * Fields
