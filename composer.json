@@ -8,6 +8,9 @@
     "contao/core-bundle": "^4.4",
     "heimrichhannot/contao-utils-bundle": "^2.97"
   },
+  "conflict": {
+    "heimrichhannot/contao-encore-bundle": "<1.5"
+  },
   "autoload": {
     "psr-4": {
       "HeimrichHannot\\NoUiSliderBundle\\": "src/"

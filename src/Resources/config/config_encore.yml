@@ -1,7 +1,6 @@
-huh:
-  encore:
-    entries:
-      - { name: contao-no-ui-slider-bundle, file: "vendor/heimrichhannot/contao-no-ui-slider-bundle/src/Resources/assets/js/contao-no-ui-slider-bundle.js"}
-    legacy:
-      js:
-        - contao-no-ui-slider-bundle
+huh_encore:
+  js_entries:
+    - { name: contao-no-ui-slider-bundle, file: "vendor/heimrichhannot/contao-no-ui-slider-bundle/src/Resources/assets/js/contao-no-ui-slider-bundle.js"}
+  unset_global_keys:
+    js:
+      - contao-no-ui-slider-bundle
