@@ -8,11 +8,25 @@ use Contao\System;
 use HeimrichHannot\FilterBundle\Event\AdjustFilterOptionsEvent;
 use HeimrichHannot\FilterBundle\Filter\Type\ChoiceType;
 use HeimrichHannot\FilterBundle\Filter\Type\MultipleRangeType;
+use HeimrichHannot\NoUiSliderBundle\Asset\NoUiSliderAsset;
 
 class AfterChoiceGetOptionsEventListener
 {
     const RANGE_STEP_MIN = 'min';
     const RANGE_STEP_MAX = 'max';
+    /**
+     * @var NoUiSliderAsset
+     */
+    protected $frontendAsset;
+
+    /**
+     * AfterChoiceGetOptionsEventListener constructor.
+     */
+    public function __construct(NoUiSliderAsset $frontendAsset)
+    {
+        $this->frontendAsset = $frontendAsset;
+    }
+
 
     /**
      * @param AdjustFilterOptionsEvent $event
@@ -25,6 +39,8 @@ class AfterChoiceGetOptionsEventListener
         if (!$element->addNoUiSliderSupport) {
             return;
         }
+
+        $this->frontendAsset->addAssets();;
 
         $options = $event->getOptions();
 

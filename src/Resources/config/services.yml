@@ -1,1 +1,13 @@
-#services:
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+
+  HeimrichHannot\NoUiSliderBundle\Asset\NoUiSliderAsset:
+    calls:
+      - [ setEncoreFrontendAsset, [ '@?HeimrichHannot\EncoreBundle\Asset\FrontendAsset' ] ]
+
+  HeimrichHannot\NoUiSliderBundle\EventListener\AfterChoiceGetOptionsEventListener:
+    autowire: true
+    tags:
+      - { name: kernel.event_listener, event: huh.filter.event.adjust_filter_options_event, method: onAdjustFilterOptions }

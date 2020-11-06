@@ -53,6 +53,5 @@ class Plugin implements BundlePluginInterface, ExtensionPluginInterface, ConfigP
     public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig)
     {
         $loader->load('@ContaoNoUiSliderBundle/Resources/config/services.yml');
-        $loader->load('@ContaoNoUiSliderBundle/Resources/config/listeners.yml');
     }
 }
