@@ -130,6 +130,7 @@ class NoUiSliderBundle {
         }
 
         label.classList.add('checked-value');
+        elem.parentNode.insertBefore(label, elem.nextSibling);
     }
 
     static getLabelFromMapping(elem, value, config, isMultiple = false) {

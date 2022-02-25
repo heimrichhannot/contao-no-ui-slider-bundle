@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.2] - 2022-02-25
+
+- Fixed: updateLabel js function again
+
 ## [0.2.1] - 2022-02-25
 
 - Fixed: updateLabel js function
