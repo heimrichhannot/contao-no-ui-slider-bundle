@@ -13,3 +13,6 @@ yarn.lock
 yarn-error.log
 src/Resources/public/js/entrypoints.json
 src/Resources/public/js/manifest.json
+.vscode
+.history
+*.code-workspace

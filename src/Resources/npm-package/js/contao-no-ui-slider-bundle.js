@@ -102,7 +102,7 @@ class NoUiSliderBundle {
     }
 
     static updateLabel(elem, config) {
-        let label = elem.parentNode.querySelector('.checked-value'),
+        let label = elem.parentNode.querySelector('.checked-value'), 
             value = elem.noUiSlider.get();
 
         if (Array.isArray(value))
@@ -114,17 +114,22 @@ class NoUiSliderBundle {
             value = Math.floor(value);
         }
 
-        if (label) {
-            let text = NoUiSliderBundle.getLabelFromMapping(elem, value, config);
-
-            label.textContent = Array.isArray(text) ? text.join(' … ') : text;
-            return;
+        if (!label) 
+        {
+            label = document.createElement('label');
         }
 
-        label = document.createElement('label');
+        let text = NoUiSliderBundle.getLabelFromMapping(elem, value, config);
+
+        if (text) {
+            label.textContent = Array.isArray(text) ? text.join(' … ') : text;
+        }
+        else
+        {
+            label.textContent = config.label;
+        }
+
         label.classList.add('checked-value');
-        label.textContent = config.label;
-        elem.parentNode.insertBefore(label, elem.nextSibling);
     }
 
     static getLabelFromMapping(elem, value, config, isMultiple = false) {
