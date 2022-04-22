@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.3] - 2022-04-22
+
+- Changed: updated aria-valuetext to improve accessibility
+
 ## [0.2.2] - 2022-02-25
 
 - Fixed: updateLabel js function again

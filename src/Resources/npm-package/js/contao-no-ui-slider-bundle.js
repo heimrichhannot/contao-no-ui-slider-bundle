@@ -103,7 +103,8 @@ class NoUiSliderBundle {
 
     static updateLabel(elem, config) {
         let label = elem.parentNode.querySelector('.checked-value'), 
-            value = elem.noUiSlider.get();
+            value = elem.noUiSlider.get(),
+            handle = elem.parentNode.querySelector('.noUi-handle');
 
         if (Array.isArray(value))
         {
@@ -129,6 +130,7 @@ class NoUiSliderBundle {
             label.textContent = config.label;
         }
 
+        handle.setAttribute('aria-valuetext', label.textContent);
         label.classList.add('checked-value');
         elem.parentNode.insertBefore(label, elem.nextSibling);
     }
