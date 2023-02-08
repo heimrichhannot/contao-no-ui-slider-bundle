@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [0.2.4] - 2023-02-08
+
+- Update: allow php 8.0
+
 ## [0.2.3] - 2022-04-22
 
 - Changed: updated aria-valuetext to improve accessibility
