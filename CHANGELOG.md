@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [1.0.0] - 2023-03-20
+- Added: support for encore contracts
+- Changed: refactored to current coding standards
+- Changed: [BC BREAK!] renamed bundle class
+- Changed: [BC BREAK!] do not use yarn package for assets
+- Changed: raised contao and php dependency
+- Fixed: deprecating warnings
+- Fixed: warning with php 8
+
 ## [0.2.4] - 2023-02-08
 
 - Update: allow php 8.0

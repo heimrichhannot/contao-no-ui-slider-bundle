@@ -4,27 +4,31 @@
 namespace HeimrichHannot\NoUiSliderBundle\EventListener;
 
 
-use Contao\System;
 use HeimrichHannot\FilterBundle\Event\AdjustFilterOptionsEvent;
 use HeimrichHannot\FilterBundle\Filter\Type\ChoiceType;
 use HeimrichHannot\FilterBundle\Filter\Type\MultipleRangeType;
 use HeimrichHannot\NoUiSliderBundle\Asset\NoUiSliderAsset;
+use HeimrichHannot\UtilsBundle\Dca\DcaUtil;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AfterChoiceGetOptionsEventListener
+class AfterChoiceGetOptionsEventListener implements EventSubscriberInterface
 {
     const RANGE_STEP_MIN = 'min';
     const RANGE_STEP_MAX = 'max';
-    /**
-     * @var NoUiSliderAsset
-     */
-    protected $frontendAsset;
+
+    private NoUiSliderAsset     $frontendAsset;
+    private DcaUtil             $dcaUtil;
+    private TranslatorInterface $translator;
 
     /**
      * AfterChoiceGetOptionsEventListener constructor.
      */
-    public function __construct(NoUiSliderAsset $frontendAsset)
+    public function __construct(NoUiSliderAsset $frontendAsset, DcaUtil $dcaUtil, TranslatorInterface $translator)
     {
         $this->frontendAsset = $frontendAsset;
+        $this->dcaUtil = $dcaUtil;
+        $this->translator = $translator;
     }
 
 
@@ -50,7 +54,7 @@ class AfterChoiceGetOptionsEventListener
                 $stopElement = $filterConfig->getElementByValue($element->stopElement);
 
                 // get options from first linked field
-                $choices = System::getContainer()->get('huh.utils.dca')->getConfigByArrayOrCallbackOrFunction(
+                $choices = $this->dcaUtil->getConfigByArrayOrCallbackOrFunction(
                     $GLOBALS['TL_DCA'][$filterConfig->getFilter()['dataContainer']]['fields'][$startElement->field],
                     'options'
                 );
@@ -87,7 +91,7 @@ class AfterChoiceGetOptionsEventListener
                     'range'         => $valueMapping,
                     'titles'        => $nameMapping,
                     'label'         => $this->getLabel($element, $event->getBuilder(), $nameMapping),
-                    'defaultLabel' => System::getContainer()->get('translator')->trans('huh.filter.checked.unselected'),
+                    'defaultLabel' => $this->translator->trans('huh.filter.checked.unselected'),
                 ];
 
                 $options['attr']['data-no-ui-slider-config'] = \json_encode($config);
@@ -96,7 +100,7 @@ class AfterChoiceGetOptionsEventListener
 
                 break;
             case ChoiceType::TYPE:
-                $choices = $options['choices'];
+                $choices = $options['choices'] ?? [];
 
                 if (empty($choices)) {
                     return;
@@ -128,7 +132,7 @@ class AfterChoiceGetOptionsEventListener
                     'range'         => $valueMapping,
                     'titles'        => $nameMapping,
                     'label'         => $this->getLabel($element, $event->getBuilder(), $nameMapping),
-                    'defaultLabel' => System::getContainer()->get('translator')->trans('huh.filter.checked.unselected'),
+                    'defaultLabel' => $this->translator->trans('huh.filter.checked.unselected'),
                 ];
 
                 $options['attr']['data-no-ui-slider-config'] = \json_encode($config);
@@ -146,8 +150,8 @@ class AfterChoiceGetOptionsEventListener
      */
     protected function getLabel($element, $builder, $nameMapping): string
     {
-        if (!($value = $builder->getData()[$element->field])) {
-            return System::getContainer()->get('translator')->trans('huh.filter.checked.unselected');
+        if (!($value = ($builder->getData()[$element->field] ?? null))) {
+            return $this->translator->trans('huh.filter.checked.unselected');
         }
 
         return $nameMapping[$value];
@@ -165,5 +169,12 @@ class AfterChoiceGetOptionsEventListener
         }
 
         return ((100 / count($choices)) * $i) . '%';
+    }
+
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            AdjustFilterOptionsEvent::NAME => 'onAdjustFilterOptions',
+        ];
     }
 }

@@ -12,42 +12,22 @@
 namespace HeimrichHannot\NoUiSliderBundle\Asset;
 
 
-use HeimrichHannot\UtilsBundle\Container\ContainerUtil;
+use HeimrichHannot\EncoreContracts\PageAssetsTrait;
 
 class NoUiSliderAsset
 {
-    /**
-     * @var ContainerUtil
-     */
-    protected $containerUtil;
-    /**
-     * @var \HeimrichHannot\EncoreBundle\Asset\FrontendAsset
-     */
-    protected $encoreFrontendAsset;
-
-    /**
-     * FrontendAsset constructor.
-     */
-    public function __construct(ContainerUtil $containerUtil)
-    {
-        $this->containerUtil = $containerUtil;
-    }
-
-    public function setEncoreFrontendAsset(\HeimrichHannot\EncoreBundle\Asset\FrontendAsset $encoreFrontendAsset): void
-    {
-        $this->encoreFrontendAsset = $encoreFrontendAsset;
-    }
+    use PageAssetsTrait;
 
     public function addAssets()
     {
-        if ($this->containerUtil->isFrontend()) {
-            $GLOBALS['TL_JAVASCRIPT']['contao-no-ui-slider-bundle'] = 'bundles/contaonouislider/js/contao-no-ui-slider-bundle.js|static';
-            $GLOBALS['TL_CSS']['contao-no-ui-slider-bundle'] = 'bundles/contaonouislider/js/contao-no-ui-slider-bundle.css';
-
-            if ($this->encoreFrontendAsset) {
-                $this->encoreFrontendAsset->addActiveEntrypoint('contao-no-ui-slider-bundle');
-            }
-        }
+        $this->addPageEntrypoint('contao-no-ui-slider-bundle', [
+            'TL_JAVASCRIPT' => [
+                'contao-no-ui-slider-bundle' => 'bundles/contaonouislider/js/contao-no-ui-slider-bundle.js|static',
+            ],
+            'TL_CSS' => [
+                'contao-no-ui-slider-bundle' => 'bundles/contaonouislider/js/contao-no-ui-slider-bundle.css',
+            ],
+        ]);
     }
 
 }

@@ -4,7 +4,6 @@
   "author": "Heimrich & Hannot GmbH <digitales@heimrich-hannot.de>",
   "license": "LGPL-3.0-or-later",
   "dependencies": {
-    "@hundh/contao-no-ui-slider-bundle": "^1.0",
     "nouislider": "^13.1.5"
   },
   "devDependencies": {

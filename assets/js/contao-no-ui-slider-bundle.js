@@ -1,4 +1,4 @@
-import { NoUiSliderBundle } from '../../npm-package';
+import { NoUiSliderBundle } from './no-ui-slider-bundle';
 
 document.addEventListener('DOMContentLoaded', NoUiSliderBundle.init);
 document.addEventListener('filterAjaxComplete', NoUiSliderBundle.init);

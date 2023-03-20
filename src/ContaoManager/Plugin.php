@@ -7,7 +7,7 @@ use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use Contao\ManagerPlugin\Config\ConfigPluginInterface;
-use HeimrichHannot\NoUiSliderBundle\ContaoNoUiSliderBundle;
+use HeimrichHannot\NoUiSliderBundle\HeimrichHannotNoUiSliderBundle;
 use Symfony\Component\Config\Loader\LoaderInterface;
 
 class Plugin implements BundlePluginInterface, ConfigPluginInterface
@@ -15,20 +15,16 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface
     /**
      * {@inheritdoc}
      */
-    public function getBundles(ParserInterface $parser)
+    public function getBundles(ParserInterface $parser): array
     {
         $loadAfter = [ContaoCoreBundle::class];
-
-        if (class_exists('HeimrichHannot\EncoreBundle\HeimrichHannotContaoEncoreBundle')) {
-            $loadAfter[] = 'HeimrichHannot\EncoreBundle\HeimrichHannotContaoEncoreBundle';
-        }
 
         if (class_exists('HeimrichHannot\FilterBundle\HeimrichHannotContaoFilterBundle')) {
             $loadAfter[] = 'HeimrichHannot\FilterBundle\HeimrichHannotContaoFilterBundle';
         }
 
         return [
-            BundleConfig::create(ContaoNoUiSliderBundle::class)->setLoadAfter($loadAfter)
+            BundleConfig::create(HeimrichHannotNoUiSliderBundle::class)->setLoadAfter($loadAfter)
         ];
     }
 
@@ -37,9 +33,6 @@ class Plugin implements BundlePluginInterface, ConfigPluginInterface
      */
     public function registerContainerConfiguration(LoaderInterface $loader, array $managerConfig)
     {
-        $loader->load('@ContaoNoUiSliderBundle/Resources/config/services.yml');
-        if (class_exists('HeimrichHannot\EncoreBundle\HeimrichHannotContaoEncoreBundle')) {
-            $loader->load('@ContaoNoUiSliderBundle/Resources/config/config_encore.yml');
-        }
+        $loader->load('@HeimrichHannotNoUiSliderBundle/config/services.yaml');
     }
 }
